@@ -42,8 +42,8 @@ async function loadSongs(){
       <div class="song">
         <span>🎵 ${song.title}</span>
         <div>
-          <button onclick="playSong('https://halal-music-backend.onrender.com/{song.url}')">▶</button>
-          <button onclick="downloadSong('https://halal-music-backend.onrender.com/{song.url}')">⬇</button>
+          <button onclick="playSong('https://halal-music-backend.onrender.com${song.url}')">▶</button>
+          <button onclick="downloadSong('https://halal-music-backend.onrender.com${song.url}')">⬇</button>
         </div>
       </div>
     `).join('');
