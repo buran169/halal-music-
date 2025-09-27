@@ -42,7 +42,7 @@ async function loadSongs(){
       <div class="song">
         <span>🎵 ${song.title}</span>
         <div>
-          <button onclick="playSong('https://halal-music-backend.onrender.com${song.url}')">▶</button>
+          <button onclick="playSong(`https://halal-music-backend.onrender.com${encodeURIComponent(song.url)}`);
           <button onclick="downloadSong('https://halal-music-backend.onrender.com${song.url}')">⬇</button>
         </div>
       </div>
@@ -55,15 +55,17 @@ async function loadSongs(){
 
 function playSong(url){
     const player = document.getElementById("player");
-    player.src = `https://halal-music-backend.onrender.com${encodeURI(url)}`;
-    player.style.display = "block"; // Show audio controls
-    player.play().catch(err=>console.error(err));
+    player.src = url; // full URL with encodeURIComponent
+    player.style.display = "block"; // show audio
+    player.play().catch(err=>{
+        console.error("Audio play failed:", err);
+        alert("Cannot play audio automatically, click play icon again");
+    });
 
-    // Hide when song ends
     player.onended = function(){
         player.style.display = "none";
     }
-}
+  }
 
 function downloadSong(url){
     const a = document.createElement('a');
