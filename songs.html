@@ -19,8 +19,8 @@ audio{width:100%;position:fixed;bottom:50px;}
 <input type="text" id="search" placeholder="Search songs...">
 </header>
 
-<main id="songList"><p>Loading songs...</p></main>
-<audio id="player" controls></audio>
+<div id="songList"></div>
+<audio id="player" controls style="display:none;"></audio>
 
 <script>
 
@@ -53,8 +53,26 @@ async function loadSongs(){
   }
 }
 
-function playSong(url){player.src=url;player.play();}
-function downloadSong(url){const a=document.createElement('a');a.href=url;a.download=url.split('/').pop();a.click();}
+function playSong(url){
+    const player = document.getElementById("player");
+    player.src = `https://halal-music-backend.onrender.com${encodeURI(url)}`;
+    player.style.display = "block"; // Show audio controls
+    player.play().catch(err=>console.error(err));
+
+    // Hide when song ends
+    player.onended = function(){
+        player.style.display = "none";
+    }
+}
+
+function downloadSong(url){
+    const a = document.createElement('a');
+    a.href = `https://halal-music-backend.onrender.com${encodeURI(url)}`;
+    a.download = url.split('/').pop();
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
 
 // Search/filter
 document.getElementById('search').addEventListener('input',e=>{
