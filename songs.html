@@ -90,13 +90,10 @@ footer div:hover {
 <header>
   <h1>🎧 Halal Music</h1>
   <input type="text" id="search" placeholder="Search songs...">
-</header>
-
 <main id="songList"></main>
 <audio id="player" controls></audio>
-<input type="text" id="search" placeholder="Search songs...">
+</header>
 
-<audio id="player" controls></audio>
 
 <footer>
   <div onclick="alert('Downloads page coming soon')">⬇ Downloads</div>
@@ -107,55 +104,45 @@ footer div:hover {
 const songList = document.getElementById("songList");
 const player = document.getElementById("player");
 
-async function loadSongs() {
-  try {
-    const res = await fetch('/songs');
+// Replace with your Render live link
+const SONG_API = "https://halal-music-backend.onrender.com/songs";
+
+async function loadSongs(){
+  try{
+    const res = await fetch(SONG_API);
     const songs = await res.json();
-    
-    if(songs.length === 0){
-      songList.innerHTML = "<p>No songs uploaded yet</p>";
+    if(songs.length===0){
+      songList.innerHTML="<p>No songs uploaded yet</p>";
       return;
     }
-
-    songList.innerHTML = songs.map(song => `
+    songList.innerHTML = songs.map(song=>`
       <div class="song">
-        <span>${song.title}</span>
+        <span>🎵 ${song.title}</span>
         <div>
-          <button onclick="playSong('${song.url}')">▶</button>
-          <button onclick="downloadSong('${song.url}')">⬇</button>
+          <button onclick="playSong('https://halal-music-backend.onrender.com${song.url}')">▶</button>
+          <button onclick="downloadSong('https://halal-music-backend.onrender.com${song.url}')">⬇</button>
         </div>
       </div>
     `).join('');
-  } catch(err){
-    songList.innerHTML = "<p>Error loading songs</p>";
+  }catch(err){
+    songList.innerHTML="<p>Error loading songs</p>";
     console.error(err);
   }
 }
 
-function playSong(url){
-  player.src = url;
-  player.play();
-}
-
-function downloadSong(url){
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = url.split('/').pop();
-  a.click();
-}
+function playSong(url){player.src=url;player.play();}
+function downloadSong(url){const a=document.createElement('a');a.href=url;a.download=url.split('/').pop();a.click();}
 
 // Search/filter
-document.getElementById('search').addEventListener('input', e => {
-  const filter = e.target.value.toLowerCase();
-  document.querySelectorAll('.song').forEach(song => {
-    const text = song.querySelector('span').textContent.toLowerCase();
-    song.style.display = text.includes(filter) ? 'flex' : 'none';
+document.getElementById('search').addEventListener('input',e=>{
+  const filter=e.target.value.toLowerCase();
+  document.querySelectorAll('.song').forEach(song=>{
+    const text=song.querySelector('span').textContent.toLowerCase();
+    song.style.display = text.includes(filter) ? 'flex':'none';
   });
 });
 
-// Initial load
 loadSongs();
 </script>
-
 </body>
 </html>
