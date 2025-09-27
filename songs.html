@@ -92,9 +92,9 @@ footer div:hover {
   <input type="text" id="search" placeholder="Search songs...">
 </header>
 
-<main id="songList">
-  <p>Loading songs...</p>
-</main>
+<main id="songList"></main>
+<audio id="player" controls></audio>
+<input type="text" id="search" placeholder="Search songs...">
 
 <audio id="player" controls></audio>
 
@@ -104,53 +104,56 @@ footer div:hover {
 </footer>
 
 <script>
-// 🎯 Song API (JSON file hosted online)
-const songAPI = "https://raw.githubusercontent.com/public-apis-playground/music-demo/main/songs.json";
-
 const songList = document.getElementById("songList");
+const player = document.getElementById("player");
 
 async function loadSongs() {
   try {
-    const res = await fetch(songAPI);
+    const res = await fetch('/songs');
     const songs = await res.json();
+    
+    if(songs.length === 0){
+      songList.innerHTML = "<p>No songs uploaded yet</p>";
+      return;
+    }
 
     songList.innerHTML = songs.map(song => `
       <div class="song">
-        <h4>${song.title}</h4>
-        <button onclick="playSong('${song.url}')">▶</button>
-        <button onclick="downloadSong('${song.url}')">⬇</button>
+        <span>${song.title}</span>
+        <div>
+          <button onclick="playSong('${song.url}')">▶</button>
+          <button onclick="downloadSong('${song.url}')">⬇</button>
+        </div>
       </div>
     `).join('');
-  } catch (err) {
-    songList.innerHTML = "<p>⚠️ Failed to load songs!</p>";
+  } catch(err){
+    songList.innerHTML = "<p>Error loading songs</p>";
     console.error(err);
   }
 }
 
-function playSong(src) {
-  const player = document.getElementById("player");
-  player.src = src;
+function playSong(url){
+  player.src = url;
   player.play();
 }
 
-function downloadSong(src) {
+function downloadSong(url){
   const a = document.createElement('a');
-  a.href = src;
-  a.download = src.split('/').pop();
+  a.href = url;
+  a.download = url.split('/').pop();
   a.click();
-  alert('✅ Added to downloads!');
 }
 
-// 🔍 Search functionality
-document.getElementById("search").addEventListener("keyup", function(e){
+// Search/filter
+document.getElementById('search').addEventListener('input', e => {
   const filter = e.target.value.toLowerCase();
-  const songs = document.querySelectorAll(".song");
-  songs.forEach(song => {
-    const text = song.querySelector("h4").textContent.toLowerCase();
-    song.style.display = text.includes(filter) ? "flex" : "none";
+  document.querySelectorAll('.song').forEach(song => {
+    const text = song.querySelector('span').textContent.toLowerCase();
+    song.style.display = text.includes(filter) ? 'flex' : 'none';
   });
 });
 
+// Initial load
 loadSongs();
 </script>
 
