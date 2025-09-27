@@ -23,11 +23,12 @@ audio{width:100%;position:fixed;bottom:50px;}
 <audio id="player" controls></audio>
 
 <script>
+
 const songList = document.getElementById("songList");
 const player = document.getElementById("player");
 
-// Replace with your Render live link if deployed
-const SONG_API = "/songs"; // local or Render: "https://halal-music-backend.onrender.com/songs"
+  const SONG_API = "https://halal-music-backend.onrender.com/songs.json";
+
 
 async function loadSongs(){
   try{
