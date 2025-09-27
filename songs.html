@@ -3,109 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Halal Music - Songs</title>
+<title>Halal Music</title>
 <style>
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #1e1e2f, #2c2c54);
-  color: white;
-}
-header {
-  text-align: center;
-  padding: 15px;
-  background: #111;
-  position: sticky;
-  top: 0;
-}
-header h1 {
-  margin: 0;
-  font-size: 22px;
-  font-weight: bold;
-}
-#search {
-  width: 80%;
-  padding: 8px 12px;
-  border-radius: 25px;
-  border: none;
-  outline: none;
-  margin-top: 10px;
-}
-#songList {
-  margin: 15px;
-}
-.song {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(255,255,255,0.08);
-  border-radius: 10px;
-  margin: 10px 0;
-  padding: 10px 15px;
-  flex-wrap: wrap;
-}
-.song h4 {
-  margin: 0;
-  font-size: 14px;
-  flex: 1;
-}
-button {
-  background: #00d1b2;
-  border: none;
-  border-radius: 8px;
-  padding: 6px 10px;
-  margin-left: 5px;
-  cursor: pointer;
-  font-size: 12px;
-  transition: 0.2s;
-}
-button:hover {
-  background: #00b89c;
-}
-audio {
-  width: 100%;
-  position: fixed;
-  bottom: 70px;
-}
-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: #222;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-  font-size: 16px;
-}
-footer div {
-  cursor: pointer;
-}
-footer div:hover {
-  color: #00cec9;
-}
+body{font-family:Arial;background:#1e1e2f;color:white;margin:0;padding:0;}
+header{text-align:center;padding:10px;background:#111;}
+#search{width:80%;padding:5px;border-radius:20px;border:none;margin-top:5px;}
+.song{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.1);margin:5px;padding:5px;border-radius:8px;}
+button{margin-left:5px;padding:5px 8px;border:none;border-radius:5px;cursor:pointer;background:#00d1b2;color:white;}
+audio{width:100%;position:fixed;bottom:50px;}
 </style>
 </head>
 <body>
-
 <header>
-  <h1>🎧 Halal Music</h1>
-  <input type="text" id="search" placeholder="Search songs...">
-<main id="songList"></main>
-<audio id="player" controls></audio>
+<h1>🎧 Halal Music</h1>
+<input type="text" id="search" placeholder="Search songs...">
 </header>
 
-
-<footer>
-  <div onclick="alert('Downloads page coming soon')">⬇ Downloads</div>
-  <div onclick="alert('Prayer page coming soon')">🕌 Prayer</div>
-</footer>
+<main id="songList"><p>Loading songs...</p></main>
+<audio id="player" controls></audio>
 
 <script>
 const songList = document.getElementById("songList");
 const player = document.getElementById("player");
 
-// Replace with your Render live link
-const SONG_API = "https://halal-music-backend.onrender.com/songs";
+// Replace with your Render live link if deployed
+const SONG_API = "/songs"; // local or Render: "https://your-render-link/songs"
 
 async function loadSongs(){
   try{
@@ -119,8 +41,8 @@ async function loadSongs(){
       <div class="song">
         <span>🎵 ${song.title}</span>
         <div>
-          <button onclick="playSong('https://halal-music-backend.onrender.com${song.url}')">▶</button>
-          <button onclick="downloadSong('https://halal-music-backend.onrender.com${song.url}')">⬇</button>
+          <button onclick="playSong('${song.url}')">▶</button>
+          <button onclick="downloadSong('${song.url}')">⬇</button>
         </div>
       </div>
     `).join('');
