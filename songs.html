@@ -108,9 +108,8 @@ footer div:hover {
 </main>
 
 <!-- Audio Player -->
-<div id="audioPlayerContainer">
-    <audio id="player" controls></audio>
-    <span id="currentSong">🎵 Song Name</span>
+<div id="audioPlayerContainer" style="display:none">
+  <audio id="player" controls></audio>
 </div>
 
 
@@ -154,21 +153,17 @@ function renderSongList(){
 }
 
 // Play song
-function playSong(index){
-    currentIndex = index;
-    const parts = songs[index].url.split('/');
-    const fileName = encodeURIComponent(parts.pop());
-    const path = parts.join('/') + '/' + fileName;
+function playSong(index) {
+  const song = songs[index];
+  const player = document.getElementById("player");
+  const container = document.getElementById("audioPlayerContainer");
 
-    const url = `https://halal-music-backend.onrender.com${path}`;
-    player.src = url;
-    currentSongSpan.textContent = `🎵 ${songs[index].title}`;
-    playerContainer.style.display = 'flex';
-    player.play().catch(err=>{
-        console.error("Audio play failed:", err);
-        alert("Cannot play audio automatically, click Play again");
-    });
-    }
+  player.src = song.url;
+  container.style.display = "block"; // Player visible
+  player.play().catch(err => {
+    console.log("Autoplay blocked, please click play manually.");
+  });
+}
 
 // Hide audio on end
 player.onended = function(){
