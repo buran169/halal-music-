@@ -160,12 +160,19 @@ function renderSongList(){
 // Play song
 function playSong(index){
     currentIndex = index;
-    const url = `https://halal-music-backend.onrender.com${encodeURIComponent(songs[index].url)}`;
+    const parts = songs[index].url.split('/');
+    const fileName = encodeURIComponent(parts.pop());
+    const path = parts.join('/') + '/' + fileName;
+
+    const url = `https://halal-music-backend.onrender.com${path}`;
     player.src = url;
     currentSongSpan.textContent = `🎵 ${songs[index].title}`;
     playerContainer.style.display = 'flex';
-    player.play().catch(err=>console.error(err));
-}
+    player.play().catch(err=>{
+        console.error("Audio play failed:", err);
+        alert("Cannot play audio automatically, click Play again");
+    });
+    }
 
 // Hide audio on end
 player.onended = function(){
